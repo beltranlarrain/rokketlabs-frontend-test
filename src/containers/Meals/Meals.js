@@ -1,19 +1,22 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 
 import Meal from './Meal/Meal'
 
-class Meals extends Component {
-
-    render() {
-        return (
-            <Fragment>
-                <div>Here are the Meals!</div>
-                <Meal mealName='meal 1 name' mealImage='meal 1 image' />
-                <div>...</div>
-                <Meal mealName='meal n name' mealImage='meal n image' />
-            </Fragment>
-        )
+const meals = (props) => {
+    let recipes = <div>Meal will load here!</div>
+    if (props.data !== []) {
+        recipes = props.data.map(meal => {
+            return (
+                <Meal
+                    mealName={meal.mealName}
+                    imageUrl={meal.imageUrl} />
+            )
+        })
     }
+
+    return (
+        recipes
+    )
 }
 
-export default Meals
+export default meals

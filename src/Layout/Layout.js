@@ -39,8 +39,8 @@ class Layout extends Component {
         axios.get(finalUrl)
             .then(async response => {
                 const handlerList = []
-                for (const element of response.data.meals) {
-                    handlerList.push(element)
+                for (const { strMeal, strMealThumb } of response.data.meals) {
+                    handlerList.push({ mealName: strMeal, imageUrl: strMealThumb })
                 }
                 await this.setState({ mealList: handlerList })
                 console.log(this.state.mealList)
@@ -54,8 +54,7 @@ class Layout extends Component {
                 <Categories data={this.state.categories} action={this.changeSelectedCategoryHandler} />
                 <br />
                 <Button clicked={this.loadMealsHandler} selected={this.state.selected}>Click  here!</Button>
-                <div>Category Info</div>
-                <Meals />
+                <Meals data={this.state.mealList} />
             </Fragment>
         )
     }
