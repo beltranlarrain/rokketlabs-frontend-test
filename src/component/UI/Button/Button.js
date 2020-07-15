@@ -7,7 +7,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 
 
 const button = (props) => (
-    <Button type="primary" shape="round" icon={<DownloadOutlined />} size='large' onClick={() => props.clicked(this, props.selected)} style={{ marginTop: '20px' }}>
+    <Button type="primary" shape="round" icon={<DownloadOutlined />} size='large' onClick={() => props.clicked(this, props.selected)} style={{ marginTop: '20px', marginBottom: '25px' }}>
         {props.children}
     </Button>
 );

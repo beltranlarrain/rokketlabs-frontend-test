@@ -11,13 +11,15 @@ import {
 import Meals from '../containers/Meals/Meals'
 import Categories from '../component/UI/Categories/Categories'
 import Button from '../component/UI/Button/Button'
+import knifeImage from '../assets/knife-green-onion.jpg'
 
 class AppLayout extends Component {
 
     state = {
         categories: [],
         selected: 'Beef',
-        mealList: []
+        mealList: [],
+        initialLoad: true
     }
 
     componentDidMount() {
@@ -48,6 +50,7 @@ class AppLayout extends Component {
                 }
                 await this.setState({ mealList: handlerList })
                 console.log(this.state.mealList)
+                this.setState({ initialLoad: false })
             })
     }
 
@@ -55,13 +58,19 @@ class AppLayout extends Component {
 
         const { Header, Content, Footer, Sider } = Layout
 
-        let menuItems = (<Menu.Item key='1' icon={<CloudDownloadOutlined />}>Loading Options!</Menu.Item>)
+        let menuItems = (<Menu.Item key='2' icon={<CloudDownloadOutlined />}>Loading Options!</Menu.Item>)
         if (this.state.categories !== []) {
             menuItems = this.state.categories.map(category => {
                 return (
                     <Menu.Item key={category.value} icon={<CheckCircleOutlined />} style={{ marginLeft: '25px' }}>{category.value}</Menu.Item >
                 )
             })
+        }
+
+        let initialImage = <div />
+
+        if (this.state.initialLoad) {
+            initialImage = <img alt='initialImage' src={knifeImage} style={{ height: '20%', width: '50%' }} />
         }
 
         return (
@@ -88,6 +97,8 @@ class AppLayout extends Component {
                                 <Categories data={this.state.categories} action={this.changeSelectedCategoryHandler} />
                                 <br />
                                 <Button clicked={this.loadMealsHandler} selected={this.state.selected}>Get recipes!</Button>
+                                <br />
+                                {initialImage}
                                 <Meals data={this.state.mealList} />
                             </div>
                         </Content>
