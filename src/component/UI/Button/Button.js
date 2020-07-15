@@ -1,11 +1,15 @@
 import React from 'react'
 
-import classes from './button.module.css'
+import { Button } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
+
+
+
 
 const button = (props) => (
-    <button
-        className={classes.Button}
-        onClick={() => props.clicked(this, props.selected)}> {props.children} </button >
+    <Button type="primary" shape="round" icon={<DownloadOutlined />} size='large' onClick={() => props.clicked(this, props.selected)} style={{ marginTop: '20px' }}>
+        {props.children}
+    </Button>
 );
 
 export default button;

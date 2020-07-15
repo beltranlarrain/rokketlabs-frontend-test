@@ -1,11 +1,11 @@
-import React,  { Component } from 'react'
-
-import Layout from './Layout/Layout'
+import React, { Component } from 'react'
+import 'antd/dist/antd.css'
+import AppLayout from './AppLayout/AppLayout'
 
 class App extends Component {
-  render () {
+  render() {
     return (
-      <Layout/>
+      <AppLayout />
     )
   }
 }
