@@ -1,14 +1,11 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-class Categories extends Component {
-
-  render() {
-    return (
-      <select onChange={this.props.action}>
-        {this.props.data.map(data => <option key={data.value} value={data.value}>{data.value}</option>)}
-      </select>
-    )
-  }
+const categories = (props) => {
+  return (
+    <select onChange={props.action}>
+      {props.data.map(data => <option key={data.value} value={data.value}>{data.value}</option>)}
+    </select>
+  )
 }
 
-export default Categories
+export default categories

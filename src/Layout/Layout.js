@@ -8,24 +8,21 @@ import Button from '../component/UI/Button/Button'
 class Layout extends Component {
 
     state = {
-        categories: [
-            { key: "Beef", value: "Beef" },
-            { key: "Chicken", value: "Chicken" },
-            { key: "Dessert", value: "Dessert" },
-            { key: "Lamb", value: "Lamb" },
-            { key: "Miscellaneous", value: "Miscellaneous" },
-            { key: "Pasta", value: "Pasta" },
-            { key: "Pork", value: "Pork" },
-            { key: "Seafood", value: "Seafood" },
-            { key: "Side", value: "Side" },
-            { key: "Starter", value: "Starter" },
-            { key: "Vegan", value: "Vegan" },
-            { key: "Vegetarian", value: "Vegetarian" },
-            { key: "Breakfast", value: "Breakfast" },
-            { key: "Goat", value: "Goat" }
-        ],
+        categories: [],
         selected: 'Beef',
         mealList: []
+    }
+
+    componentDidMount() {
+        axios.get('https://www.themealdb.com/api/json/v1/1/categories.php')
+            .then(async response => {
+                const categoryNames = []
+                for (const { strCategory } of response.data.categories) {
+                    categoryNames.push({ key: strCategory, value: strCategory })
+                }
+                await this.setState({ categories: categoryNames })
+                console.log(this.state.categories)
+            })
     }
 
     changeSelectedCategoryHandler = async event => {
@@ -49,13 +46,15 @@ class Layout extends Component {
 
     render() {
         return (
-            <Fragment>
-                <div>Welcome to Meal previewer!</div>
-                <Categories data={this.state.categories} action={this.changeSelectedCategoryHandler} />
-                <br />
-                <Button clicked={this.loadMealsHandler} selected={this.state.selected}>Click  here!</Button>
-                <Meals data={this.state.mealList} />
-            </Fragment>
+            <div>
+                <Fragment>
+                    <div>Welcome to Meal previewer!</div>
+                    <Categories data={this.state.categories} action={this.changeSelectedCategoryHandler} />
+                    <br />
+                    <Button clicked={this.loadMealsHandler} selected={this.state.selected}>Click  here!</Button>
+                    <Meals data={this.state.mealList} />
+                </Fragment>
+            </div>
         )
     }
 }

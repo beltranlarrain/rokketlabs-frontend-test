@@ -8,6 +8,7 @@ const meals = (props) => {
         recipes = props.data.map(meal => {
             return (
                 <Meal
+                    key={meal.mealName}
                     mealName={meal.mealName}
                     imageUrl={meal.imageUrl} />
             )
