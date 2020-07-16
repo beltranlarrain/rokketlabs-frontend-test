@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import axios from 'axios'
 
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Spin, Space } from 'antd'
 import {
     CloudDownloadOutlined
 } from '@ant-design/icons'
@@ -18,10 +18,13 @@ class AppLayout extends Component {
         categories: [],
         selected: 'Beef',
         mealList: [],
-        initialLoad: true
+        initialLoad: true,
+        categoriesLoading: false,
+        mealsLoading: false
     }
 
     componentDidMount() {
+        this.setState({ categoriesLoading: true })
         axios.get('https://www.themealdb.com/api/json/v1/1/categories.php')
             .then(async response => {
                 const categoryNames = []
@@ -30,6 +33,7 @@ class AppLayout extends Component {
                 }
                 await this.setState({ categories: categoryNames })
                 console.log(this.state.categories)
+                this.setState({ categoriesLoading: false })
             })
     }
 
@@ -39,6 +43,7 @@ class AppLayout extends Component {
     }
 
     loadMealsHandler = (event, selected) => {
+        this.setState({ mealsLoading: true })
         const baseUrl = 'https://www.themealdb.com/api/json/v1/1/filter.php?c='
         const finalUrl = baseUrl + selected
         axios.get(finalUrl)
@@ -51,6 +56,7 @@ class AppLayout extends Component {
                 await this.setState({ mealList: handlerList })
                 console.log(this.state.mealList)
                 this.setState({ initialLoad: false })
+                this.setState({ mealsLoading: false })
             })
     }
 
@@ -71,6 +77,27 @@ class AppLayout extends Component {
 
         if (this.state.initialLoad) {
             initialImage = <img alt='initialImage' src={knifeImage} style={{ width: '68%', padding: '5px 5px' }} />
+        }
+
+        const loadingSpinner = (marginLeft = 0) => {
+            return (
+                <Space size='large' style={{ marginLeft: marginLeft }}>
+                    <Spin size="large" tip="Loading..." />
+                </Space>
+            )
+        }
+
+        let dropdownContent = <Categories data={this.state.categories} action={this.changeSelectedCategoryHandler} />
+        if (this.state.categoriesLoading) {
+            menuItems = loadingSpinner('20%')
+            dropdownContent = loadingSpinner()
+        }
+
+        let mealContent = <Meals data={this.state.mealList} />
+
+        if (this.state.mealsLoading) {
+            mealContent = loadingSpinner()
+            initialImage = <div />
         }
 
         return (
@@ -96,12 +123,12 @@ class AppLayout extends Component {
                         <Content style={{ margin: '24px 16px 0', overflow: 'initial', height: '100%' }}>
                             <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
                                 <div style={{ marginBottom: '5px', fontSize: '20px' }}>Select a Category:</div>
-                                <Categories data={this.state.categories} action={this.changeSelectedCategoryHandler} />
+                                {dropdownContent}
                                 <br />
-                                <Button clicked={this.loadMealsHandler} selected={this.state.selected}>Get ideas!</Button>
+                                {<Button clicked={this.loadMealsHandler} selected={this.state.selected}>Get ideas!</Button>}
                                 <br />
+                                {mealContent}
                                 {initialImage}
-                                <Meals data={this.state.mealList} />
                             </div>
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>Ultimate Choose Your Meal Experience ©2020 Created by Beltrán</Footer>
