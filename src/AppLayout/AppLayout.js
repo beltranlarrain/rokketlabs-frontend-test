@@ -3,15 +3,14 @@ import axios from 'axios'
 
 import { Layout, Menu } from 'antd'
 import {
-    CloudDownloadOutlined,
-    EyeOutlined,
-    CheckCircleOutlined
+    CloudDownloadOutlined
 } from '@ant-design/icons'
 
 import Meals from '../containers/Meals/Meals'
 import Categories from '../component/UI/Categories/Categories'
 import Button from '../component/UI/Button/Button'
-import knifeImage from '../assets/knife-green-onion.jpg'
+import knifeImage from '../assets/green-onion-title.jpg'
+import Logo from '../assets/beltran-logo.png'
 
 class AppLayout extends Component {
 
@@ -46,7 +45,8 @@ class AppLayout extends Component {
             .then(async response => {
                 const handlerList = []
                 for (const { strMeal, strMealThumb } of response.data.meals) {
-                    handlerList.push({ mealName: strMeal, imageUrl: strMealThumb })
+                    const strMealCorrected = strMeal.replace('&', 'and')
+                    handlerList.push({ mealName: strMealCorrected, imageUrl: strMealThumb })
                 }
                 await this.setState({ mealList: handlerList })
                 console.log(this.state.mealList)
@@ -62,7 +62,7 @@ class AppLayout extends Component {
         if (this.state.categories !== []) {
             menuItems = this.state.categories.map(category => {
                 return (
-                    <Menu.Item key={category.value} icon={<CheckCircleOutlined />} style={{ marginLeft: '25px' }}>{category.value}</Menu.Item >
+                    <Menu.Item key={category.value} style={{ marginLeft: '25px' }}>{category.value}</Menu.Item >
                 )
             })
         }
@@ -70,7 +70,7 @@ class AppLayout extends Component {
         let initialImage = <div />
 
         if (this.state.initialLoad) {
-            initialImage = <img alt='initialImage' src={knifeImage} style={{ height: '20%', width: '50%' }} />
+            initialImage = <img alt='initialImage' src={knifeImage} style={{ width: '68%', padding: '5px 5px' }} />
         }
 
         return (
@@ -78,31 +78,33 @@ class AppLayout extends Component {
                 <Layout>
                     <Sider
                         style={{
-                            overflow: 'visible',
+                            overflow: 'auto',
                             height: '100vh',
                             position: 'fixed',
                             left: 0,
+                            overflowX: 'hidden'
                         }}>
                         <div className="logo" />
                         <Menu theme="dark" mode="inline" selectable={false}>
-                            <Menu.Item key='1' icon={<EyeOutlined />} style={{ marginTop: '30px' }}>Check them out:</Menu.Item>
+                            <Menu.Item key='1' style={{ marginTop: '30px', fontSize: '17px' }}>Categories</Menu.Item>
                             {menuItems}
+                            <img alt='beltran-logo' src={Logo} style={{ width: '35%', height: '35%', margin: '20%' }} />
                         </Menu>
                     </Sider>
                     <Layout className="site-layout" style={{ marginLeft: 200, minHeight: '100vh' }}>
-                        <Header className="site-layout-background" style={{ padding: 0, color: 'white', textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }}>Welcome to the Ultimate Meal Previewer!</Header>
+                        <Header className="site-layout-background" style={{ padding: 0, color: 'white', textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }}>Ultimate Choose Your Meal Experience!</Header>
                         <Content style={{ margin: '24px 16px 0', overflow: 'initial', height: '100%' }}>
                             <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
-                                <div style={{ marginBottom: '5px', fontWeight: 'bold' }}>Select a Category:</div>
+                                <div style={{ marginBottom: '5px', fontSize: '20px' }}>Select a Category:</div>
                                 <Categories data={this.state.categories} action={this.changeSelectedCategoryHandler} />
                                 <br />
-                                <Button clicked={this.loadMealsHandler} selected={this.state.selected}>Get recipes!</Button>
+                                <Button clicked={this.loadMealsHandler} selected={this.state.selected}>Get ideas!</Button>
                                 <br />
                                 {initialImage}
                                 <Meals data={this.state.mealList} />
                             </div>
                         </Content>
-                        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                        <Footer style={{ textAlign: 'center' }}>Ultimate Choose Your Meal Experience ©2020 Created by Beltrán</Footer>
                     </Layout>
                 </Layout>
 
