@@ -16,7 +16,7 @@ class AppLayout extends Component {
 
     state = {
         categories: [],
-        selected: 'Beef',
+        selected: '',
         mealList: [],
         initialLoad: true,
         categoriesLoading: false,
@@ -34,6 +34,7 @@ class AppLayout extends Component {
                 await this.setState({ categories: categoryNames })
                 console.log(this.state.categories)
                 this.setState({ categoriesLoading: false })
+                await this.setState({ selected: this.state.categories[0].key })
             })
     }
 
